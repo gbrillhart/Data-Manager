@@ -80,6 +80,8 @@ def menu(logins):
             view_login(logins)
         elif(user_sel == '3'):
             delete_login(logins)
+        elif(user_sel == '4'):
+            enc_document(logins)
         elif(user_sel == '9'):
             return
         else:
@@ -193,7 +195,7 @@ def enc_document(logins):
             return
         username = input("Enter in the path to the document: ")
         password = input("Enter a password for the encryption: ")
-        encrypt_path = input("Enter in the path for the encyrpted document: ")
+        encrypt_path = input("Enter in the path for the encrypted document: ")
         temp_login = LoginInfo.LoginInfo(name, username, password, encrypt_path)
         os.system('cls||clear')
         print("Is this entry correct?\nDocument Name: " + name + "\nDocument Path: " + username + "\nKey: " + password + "\nNew Document: " + encrypt_path)
