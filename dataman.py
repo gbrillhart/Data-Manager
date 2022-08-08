@@ -105,7 +105,52 @@ def add_new_login(logins):
             os.system('cls||clear')
             print("Sorry, let's try again")
 def edit_login(logins):
-    return
+    os.system('cls||clear')
+    while True:
+        name = input("Enter the name of the login you would like to edit or type \'Exit\' to return: ")
+        if(name == 'Exit'):
+            return
+        elif name in logins:
+            while True:
+                print(logins[name])
+                user_sel = input("(0) Edit Name: \n" + 
+                    "(1) Edit Username: \n" + 
+                    "(2) Edit Password: \n" +
+                    "(3) Edit Email: \n"+
+                    "(4) Done editing: ")
+                if user_sel == '0':
+                    login = logins.pop(name)
+                    new_name = input("Enter the new name of the login: ")
+                    login.name = new_name
+                    name = new_name
+                    logins[new_name] = login
+                    print("Name has been changed")
+                    os.system('cls||clear')
+                elif user_sel == '1':
+                    new_user = input("Enter the new username of the login: ")
+                    logins[name].username = new_user
+                    print("Username has been changed")
+                    os.system('cls||clear')
+                elif user_sel == '2':
+                    new_pass = input("Enter the new password of the login: ")
+                    logins[name].password = new_pass
+                    print("Password has been changed")
+                    os.system('cls||clear')
+                elif user_sel == '3':
+                    new_email = input("Enter the new email of the login: ")
+                    logins[name].email = new_email
+                    print("Email has been changed")
+                    os.system('cls||clear')
+                elif user_sel == '4':
+                    os.system('cls||clear')
+                    return
+                else:
+                    os.system('cls||clear')
+                    print("Invalid selection, please try again")
+        else:
+            os.system('cls||clear')
+            print("That login does not exist, please check spelling")
+
 def view_login(logins):
     return
 def delete_login(logins):
