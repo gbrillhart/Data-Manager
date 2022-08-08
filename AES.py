@@ -78,7 +78,6 @@ def encrypt(funenc, key, fenc): #infile, key, outfile
     key += '0' * (keysize//8 - len(key)) if len(key) < keysize//8 else key[:keysize//8]  
     key_bv = BitVector( textstring = key )
     key_schedule = gen_key_schedule_256( key_bv )
-    print(subBytesTable)
     #generate mass bv
     bv = BitVector(filename = funenc)
     ftemp = open(fenc, 'w') #wipe old encryption file

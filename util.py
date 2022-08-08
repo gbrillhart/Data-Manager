@@ -24,7 +24,7 @@ def getInfo(fdec) -> dict:
             username = decrypted.readline().strip()
             password = decrypted.readline().strip()
             email = decrypted.readline().strip()
-            login = LoginInfo(name, username, password, email)
+            login = LoginInfo.LoginInfo(name, username, password, email)
             logins[login.name] = login
     except:
         return logins
