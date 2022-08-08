@@ -57,9 +57,10 @@ def main():
 
 
 def menu(logins):
+    os.system('cls||clear')
     user_sel = -1
     while not(user_sel == 9):
-        user_sel = input("------------------------\n" +
+        user_sel = input(
                 "(0) Add a new login entry\n" + 
                 "(1) Edit a previous login entry\n" + 
                 "(2) View a login entry\n" +
@@ -75,6 +76,10 @@ def menu(logins):
             add_new_login(logins)
         elif(user_sel == '1'):
             edit_login(logins)
+        elif(user_sel == '2'):
+            view_login(logins)
+        elif(user_sel == '3'):
+            delete_login(logins)
         elif(user_sel == '9'):
             return
         else:
@@ -152,9 +157,34 @@ def edit_login(logins):
             print("That login does not exist, please check spelling")
 
 def view_login(logins):
-    return
+    os.system('cls||clear')
+    while True:
+        name = input("Enter the name of the login you would like to view or type \'Exit\' to return: ")
+        if(name == 'Exit'):
+            return
+        elif name in logins:
+            print(logins[name])
+        else:
+            os.system('cls||clear')
+            print("Sorry, that login does not exist. Please check spelling.")
 def delete_login(logins):
-    return
+    os.system('cls||clear')
+    while True:
+        name = input("Enter the name of the login you would like to delete or type \'Exit\' to return: ")
+        if(name == 'Exit'):
+            return
+        elif name in logins:
+            confirmation = input(str(logins[name]) + "\nDelete this login(y/n)? ")
+            if (confirmation == 'y' or confirmation == 'yes'):
+                logins.pop(name)
+                os.system('cls||clear')
+                print("Login was deleted")
+            else:
+                os.system('cls||clear')
+                print("Login was not deleted")
+        else:
+            os.system('cls||clear')
+            print("Sorry, that login does not exist. Please check spelling.")
 def enc_document(logins):
     return
 def dec_document(logins):
