@@ -186,7 +186,32 @@ def delete_login(logins):
             os.system('cls||clear')
             print("Sorry, that login does not exist. Please check spelling.")
 def enc_document(logins):
-    return
+    os.system('cls||clear')
+    while True:
+        name = input("Enter in a name for the document (Type \'Exit\' to return): ")
+        if(name == 'Exit'):
+            return
+        username = input("Enter in the path to the document: ")
+        password = input("Enter a password for the encryption: ")
+        encrypt_path = input("Enter in the path for the encyrpted document: ")
+        temp_login = LoginInfo.LoginInfo(name, username, password, encrypt_path)
+        os.system('cls||clear')
+        print("Is this entry correct?\nDocument Name: " + name + "\nDocument Path: " + username + "\nKey: " + password + "\nNew Document: " + encrypt_path)
+        response = input("y/n: ")
+        if response == 'y' or response == "yes":
+            if (temp_login.name not in logins):
+                os.system('cls||clear')
+                logins[temp_login.name] = temp_login
+                print("Encrypting...")
+                AES.encrypt(username, password, encrypt_path)
+                print("The document was encrypted and a login stored in dataman")
+                return
+            else:
+                os.system('cls||clear')
+                print("Sorry, there is already an entry with the " + temp_login.name + " name")
+        else:
+            os.system('cls||clear')
+            print("Sorry, let's try again")
 def dec_document(logins):
     return
 def hash_document(logins):
