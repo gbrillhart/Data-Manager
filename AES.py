@@ -70,11 +70,15 @@ def gee(keyword, round_constant, byte_sub_table):
 
 #build by Garrett Brillhart
 def encrypt(funenc, key, fenc): #infile, key, outfile
+    genTables()
     #get key and generate round keys
-    keysize = len(key) * 8
+    key = key.strip()
+    key = key.strip('\n')
+    keysize = 256
     key += '0' * (keysize//8 - len(key)) if len(key) < keysize//8 else key[:keysize//8]  
     key_bv = BitVector( textstring = key )
     key_schedule = gen_key_schedule_256( key_bv )
+    print(subBytesTable)
     #generate mass bv
     bv = BitVector(filename = funenc)
     ftemp = open(fenc, 'w') #wipe old encryption file
@@ -142,8 +146,11 @@ def encrypt(funenc, key, fenc): #infile, key, outfile
     
 
 def decrypt(fenc, key, fdec):
+    genTables()
     #get and create round keys
-    keysize = len(key) * 8
+    key = key.strip()
+    key = key.strip('\n')
+    keysize = 256
     key += '0' * (keysize//8 - len(key)) if len(key) < keysize//8 else key[:keysize//8]  
     key_bv = BitVector( textstring = key )
     key_schedule = gen_key_schedule_256( key_bv )

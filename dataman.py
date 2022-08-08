@@ -10,11 +10,9 @@ from util import *
 
 def main():
     userpass = ""
-    try:
-        passfile = open("dataman.enc", 'r')
+    if (os.path.exists("dataman.enc")):
         user_pass = input("Welcome to DataMan!\nPlease enter the unpacking password: ")
-        passfile.close()
-    except:
+    else:
         print("Cannot locate/open dataman.enc, creating new file...")
         decfile = open("dataman.dec", 'w')
         decfile.write("Welcome to Dataman\n")
@@ -43,7 +41,6 @@ def main():
     logins = getInfo("dataman.dec")
     #Enter UI state
     #menu(passfile)
-    passfile.close()
 
 def menu(fdata):
     user_sel = -1
