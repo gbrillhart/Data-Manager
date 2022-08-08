@@ -14,18 +14,6 @@ AES_modulus = BitVector(bitstring='100011011')
 subBytesTable = []                                                  # for encryption
 invSubBytesTable = []                                               # for decryption
 
-#sourced from Avi Kak and adapted by Garrett Brillhart
-def get_encryption_key():
-    fkey = open(sys.argv[3], 'r')
-    key = fkey.read()
-    fkey.close()
-    key = key.strip()
-    key = key.strip('\n')
-    keysize = len(key) * 8
-    key += '0' * (keysize//8 - len(key)) if len(key) < keysize//8 else key[:keysize//8]  
-    key_bv = BitVector( textstring = key )
-    return key_bv
-
 #sourced from Avi Kak
 def gen_subbytes_table():
     subBytesTable = []
@@ -81,13 +69,15 @@ def gee(keyword, round_constant, byte_sub_table):
     return newword, round_constant
 
 #build by Garrett Brillhart
-def encrypt(): #file, key
+def encrypt(funenc, key, fenc): #infile, key, outfile
     #get key and generate round keys
-    key = get_encryption_key()
-    key_schedule = gen_key_schedule_256( key )
+    keysize = len(key) * 8
+    key += '0' * (keysize//8 - len(key)) if len(key) < keysize//8 else key[:keysize//8]  
+    key_bv = BitVector( textstring = key )
+    key_schedule = gen_key_schedule_256( key_bv )
     #generate mass bv
-    bv = BitVector(filename = sys.argv[2])
-    ftemp = open(sys.argv[4], 'w') #wipe old encryption file
+    bv = BitVector(filename = funenc)
+    ftemp = open(fenc, 'w') #wipe old encryption file
     ftemp.close()
     while (bv.more_to_read):
         bitvec = bv.read_bits_from_file( 128 )
@@ -144,23 +134,25 @@ def encrypt(): #file, key
                     update_key += 1
                 #print("After round keys: " + bitvec.get_hex_string_from_bitvector())
             #write to file
-            fout = open(sys.argv[4], 'ab')
+            fout = open(fenc, 'a')
             hex_string = bitvec.get_hex_string_from_bitvector()
-            fout.write(bytes.fromhex(hex_string))
+            fout.write(hex_string)
             fout.close()
     bv.close_file_object()
     
 
-def decrypt():
+def decrypt(fenc, key, fdec):
     #get and create round keys
-    key = get_encryption_key()
-    key_schedule = gen_key_schedule_256( key )
+    keysize = len(key) * 8
+    key += '0' * (keysize//8 - len(key)) if len(key) < keysize//8 else key[:keysize//8]  
+    key_bv = BitVector( textstring = key )
+    key_schedule = gen_key_schedule_256( key_bv )
     #read in hex input and create bv
-    fencrypted = open(sys.argv[2],'rb')
-    hexstring_in = fencrypted.read().hex()
+    fencrypted = open(fenc,'r')
+    hexstring_in = fencrypted.read()
     fencrypted.close()
     bv = BitVector(hexstring = hexstring_in)
-    ftemp = open(sys.argv[4], 'w') #wipe old decryption file
+    ftemp = open(fdec, 'w') #wipe old decryption file
     ftemp.close()
     #iterate over length of bitvector
     for idx in range(0,bv.length(),128):
@@ -218,7 +210,7 @@ def decrypt():
                             bitvec[idx_bv + int(idx_mult/32 * 8):idx_bv + int(idx_mult/32 * 8) + 8] = temp_res
                     #print("After column mixing: " + bitvec.get_hex_string_from_bitvector())
             #print ascii of decoded message
-            fout = open(sys.argv[4], 'a')
+            fout = open(fdec, 'a')
             ascii_string = bitvec.get_bitvector_in_ascii() #flip again
             ascii_string = ascii_string.rstrip('\0')
             fout.write(ascii_string)

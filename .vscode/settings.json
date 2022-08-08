@@ -1,0 +1,5 @@
+{
+    "python.analysis.extraPaths": [
+        "./BitVector-3.5.0"
+    ]
+}
