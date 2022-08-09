@@ -14,6 +14,8 @@ def verifyEnc(fdec) -> bool:
 def getInfo(fdec) -> dict:
     logins = dict()
     try:
+        if not verifyEnc(fdec):
+            return None
         decrypted = open(fdec, 'r')
         decrypted.seek(0,0)
         decrypted.readline()
@@ -29,8 +31,3 @@ def getInfo(fdec) -> dict:
     except:
         return logins
     return logins
-
-def printLogins(logins):
-    print("Login Info")
-    for login in logins:
-        print(login)
