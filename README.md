@@ -1,4 +1,4 @@
-# Data-Manager #
+# Dataman (Data-Manager) #
 
 ### Program Info: ###
 Dataman is a lightweight AES and hashing platform to secure files and passwords written in pure Python 3. It utilizes an AES encryption program written by myself for a previous Computer Security class at Purdue and adapted for use in this program. It also utilizes the open source Bitvector 3.5 module, written by Purdue Professor Avi Kak which allows access and use of individual bits in pure Python. This program intent was to create a usable password and encryption program to facilitate my own learning and to present my own Python coding skills. It is secure for the average computer user, but not recommended against any serious and highly-skilled attackers.
