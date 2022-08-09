@@ -396,12 +396,19 @@ def main():
         os.system('cls||clear')
         if access_granted:
             print("Saving Data...")
+            #writing data to encode
             decfile = open("dataman.dec", 'w')
-            #undo Comments if wish to have decrypted dataman file
-            # decfile.write("Welcome to Dataman\n")
-            # for login in logins:
-            #     decfile.write(logins[login].strWrite())
+            
+            decfile.write("Welcome to Dataman\n")
+            for login in logins:
+                 decfile.write(logins[login].strWrite())
             decfile.close()
+            #encrypting
             AES.encrypt("dataman.dec", user_pass, "dataman.enc")
+            #comment out next two lines for unencrypted dataman file, this wipes unencrypted dataman
+            decfile = open("dataman.dec", 'w')
+            decfile.close()
+            
+            
 if __name__ == "__main__":
     main()
