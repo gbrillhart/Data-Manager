@@ -4,10 +4,10 @@
 Dataman is a lightweight AES and hashing platform to secure files and passwords written in pure Python 3. It utilizes an AES encryption program written by myself for a previous Computer Security class at Purdue and adapted for use in this program. It also utilizes the open source Bitvector 3.5 module, written by Purdue Professor Avi Kak which allows access and use of individual bits in pure Python. This program intent was to create a usable password and encryption program to facilitate my own learning and to present my own Python coding skills. It is secure for the average computer user, but not recommended against any serious and highly-skilled attackers.
 - - - -
 ### Usage: ###
- To run, use code(python3 dataman.py) or code(python dataman.py)
-
+ To run, use  `code(python3 dataman.py)`or `code(python dataman.py)`
+ 
 ### Dependencies: ###
-Bitvector 3.5 module API page can be found at https://pypi.org/project/BitVector/ and https://engineering.purdue.edu/kak/dist/BitVector-3.5.0.html and installed with 'code(pip install BitVector)' or by including the provided folder within the repo in local path. All other dependencies are native to Python 3.
+Bitvector 3.5 module API page can be found at https://pypi.org/project/BitVector/ and https://engineering.purdue.edu/kak/dist/BitVector-3.5.0.html and installed with `code(pip install BitVector)` or by including the provided folder within the repo in local path. All other dependencies are native to Python 3.
 
 ### Packing and Unpacking: ###
 Dataman holds an encrypted file of all login information created by the user. This file will be unpacked by the user at startup, asking for the unpacking password. Dataman never writes the packing password to a file for security, instead testing of whether or not decrypting the dataman.enc file provides actual data. If no dataman.enc file can be found, dataman will request a password and create a new one. Upon termination of the program, dataman automatically encrypts and writes the login information to the dataman.enc file and destroys the dataman.dec file. For security, this happens on forced termination, errors, and the correct exit command so that the decrypted file will not remain and the encryption will be written back. The only method around this would be a hard crash (loss of power, etc.). A fix for this would be to encrypt and decrypt on the fly upon all data altering, but this would introduce a time wait upon almost all actions.
