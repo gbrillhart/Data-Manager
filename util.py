@@ -3,6 +3,7 @@
 import AES
 import LoginInfo
 
+#verify the decryption by making sure first line of dataman matches
 def verifyEnc(fdec) -> bool:
     decrypted = open(fdec, 'r')
     firstline = decrypted.readline()
@@ -11,6 +12,7 @@ def verifyEnc(fdec) -> bool:
         return True
     return False
 
+#return a dictionary of all logins on the dataman file
 def getInfo(fdec) -> dict:
     logins = dict()
     try:
