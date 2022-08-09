@@ -1,74 +1,77 @@
 #!/usr/bin/env python3
-#Homework Number: 4
-#Name: Garrett Brillhart
-#ECN Login: gbrillha
-#Due Data: 2/10/2022
-### hw2_starter.py
-#helper functions sourced or built from Avi Kak labeled in function header
-#All other functions written and developed by Garrett Brillhart
+
 from fileinput import filename
 import sys
 from BitVector import *
 
 AES_modulus = BitVector(bitstring='100011011')
-subBytesTable = []                                                  # for encryption
-invSubBytesTable = []                                               # for decryption
+subBytesTable = []      # for encryption
+invSubBytesTable = []       # for decryption
 
-#sourced from Avi Kak
+#this function generates the substitution bytes tables necessary for AES
 def gen_subbytes_table():
     subBytesTable = []
-    c = BitVector(bitstring='01100011')
+    c = BitVector(bitstring='01100011') #constant bitstring
     for i in range(0, 256):
+        #find the multiplicative inverse and avoid error of 0 MI
         a = BitVector(intVal = i, size=8).gf_MI(AES_modulus, 8) if i != 0 else BitVector(intVal=0)
+        #XOR shifted bits with each other and the constant
         a1,a2,a3,a4 = [a.deep_copy() for x in range(4)]
         a ^= (a1 >> 4) ^ (a2 >> 5) ^ (a3 >> 6) ^ (a4 >> 7) ^ c
         subBytesTable.append(int(a))
     return subBytesTable
 
-#Sourced from Avi Kak
+#This generates the key schedule of 60 keywords necessary for 256-Bit AES.
+#it uses the first four keywords and XORs the input. The 14 rounds then use 4 keywords
+#each from the schedule
 def gen_key_schedule_256(key_bv):
+    #init sub byte table and vars
     byte_sub_table = gen_subbytes_table()
-    #  We need 60 keywords (each keyword consists of 32 bits) in the key schedule for
-    #  256 bit AES. The 256-bit AES uses the first four keywords to xor the input
-    #  block with.  Subsequently, each of the 14 rounds uses 4 keywords from the key
-    #  schedule. We will store all 60 keywords in the following list:
     key_words = [None for i in range(60)]
     round_constant = BitVector(intVal = 0x01, size=8)
+    #first four keywords
     for i in range(8):
         key_words[i] = key_bv[i*32 : i*32 + 32]
+    #next 14 keywords, acting as sets of 4
     for i in range(8,60):
+        #use 'g' function into an XOR
         if i%8 == 0:
             kwd, round_constant = gee(key_words[i-1], round_constant, byte_sub_table)
             key_words[i] = key_words[i-8] ^ kwd
+        #simple XOR
         elif (i - (i//8)*8) < 4:
             key_words[i] = key_words[i-8] ^ key_words[i-1]
+        #XOR and byteSubTable
         elif (i - (i//8)*8) == 4:
             key_words[i] = BitVector(size = 0)
             for j in range(4):
                 key_words[i] += BitVector(intVal = 
                                  byte_sub_table[key_words[i-1][8*j:8*j+8].intValue()], size = 8)
             key_words[i] ^= key_words[i-8] 
+        #Circular XOR with first and last bit of the byte
         elif ((i - (i//8)*8) > 4) and ((i - (i//8)*8) < 8):
             key_words[i] = key_words[i-8] ^ key_words[i-1]
         else:
             sys.exit("error in key scheduling algo for i = %d" % i)
     return key_words
 
-#Sourced from Avi Kak
+#this is the AES 'g' function that rotates keywords, substitutes with the byte substitution table, and
+# XORs with the round constant. The round Constant is then modularly multiplied with the AES module.
 def gee(keyword, round_constant, byte_sub_table):
-    '''
-    This is the g() function you see in Figure 4 of Lecture 8.
-    '''
+    #rotate
     rotated_word = keyword.deep_copy()
     rotated_word << 8
     newword = BitVector(size = 0)
+    #sub bytes
     for i in range(4):
         newword += BitVector(intVal = byte_sub_table[rotated_word[8*i:8*i+8].intValue()], size = 8)
+    #XOR input and use modular multiplicaiton with 0x02 constant
     newword[:8] ^= round_constant
     round_constant = round_constant.gf_multiply_modular(BitVector(intVal = 0x02), AES_modulus, 8)
     return newword, round_constant
 
-#build by Garrett Brillhart
+#AES encryption function takes in a path to unencrypted file, key, and file to write the encryption to
+#pads the keys with '0'. Writes out in readable hex
 def encrypt(funenc, key, fenc): #infile, key, outfile
     genTables()
     #get key and generate round keys
@@ -143,7 +146,8 @@ def encrypt(funenc, key, fenc): #infile, key, outfile
             fout.close()
     bv.close_file_object()
     
-
+#AES decryption function takes in a path to encrypted file, key, and file to write the decryption to
+#pads the keys with '0'. Assumes encryption is in readable hex
 def decrypt(fenc, key, fdec):
     genTables()
     #get and create round keys
@@ -224,8 +228,9 @@ def decrypt(fenc, key, fdec):
     
 
 
-#sourced from Avi Kak
+#Generates the sub bytes table and inverse sub bytes table
 def genTables():
+    #table generation constants
     c = BitVector(bitstring='01100011')
     d = BitVector(bitstring='00000101')
     for i in range(0, 256):

@@ -10,16 +10,6 @@ class LoginInfo:
         self.name = name
         self.email= email
 
-    #setters
-    def set_username(self, username):
-        self.username = username
-    def set_password(self, password):
-        self.password = password
-    def set_Name(self, identifier):
-        self.name = identifier
-    def set_email(self, email):
-        self.email = email   
-
     #tostring
     def __str__(self) -> str:
         return "Name: " + self.name + "\nUsername: " + self.username + "\nPassword: " + self.password + "\nEmail: " + self.email
@@ -37,5 +27,6 @@ class LoginInfo:
             return True
         return False
     
+    #string for writing login info easily
     def strWrite(self) -> str:
         return self.name + "\n" + self.username + "\n" + self.password + "\n" + self.email+ "\n"
