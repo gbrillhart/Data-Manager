@@ -4,7 +4,7 @@
 Dataman is a lightweight AES and hashing platform to secure files and passwords written in pure Python 3. It utilizes an AES encryption program written by myself for a previous Computer Security class at Purdue and adapted for use in this program. It also utilizes the open source Bitvector 3.5 module, written by Purdue Professor Avi Kak which allows access and use of individual bits in pure Python. This program intent was to create a usable password and encryption program to facilitate my own learning and to present my own Python coding skills. It is secure for the average computer user, but not recommended against any serious and highly-skilled attackers.
 - - - -
 ### Usage: ###
- To run, use 'code(python3 dataman.py)' or 'code(python dataman.py)'
+ To run, use code(python3 dataman.py) or code(python dataman.py)
 
 ### Dependencies: ###
 Bitvector 3.5 module API page can be found at https://pypi.org/project/BitVector/ and https://engineering.purdue.edu/kak/dist/BitVector-3.5.0.html and installed with 'code(pip install BitVector)' or by including the provided folder within the repo in local path. All other dependencies are native to Python 3.
@@ -84,7 +84,9 @@ Contains a few helpful functions to make code more ubiquitous and standalone.
 **Bitvector 3.5 Folder**- Open source Bitvector module designed to use bitstrings in pure python. Written by Purdue Professor Avi Kak.
 - - - -
 Thanks for reading!
+
 **Creator -**
     Garrett Brillhart: creator of code, email garrett.brillhart@gmail.com for questions
+    
 **Additional Credits -**
     Avi Kak: creator of Bitvector 3.5 module, additional support functions on AES.py
