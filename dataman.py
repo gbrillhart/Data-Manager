@@ -57,9 +57,9 @@ def main():
 
 
 def menu(logins):
-    os.system('cls||clear')
     user_sel = -1
     while not(user_sel == 9):
+        os.system('cls||clear')
         user_sel = input(
                 "(0) Add a new login entry\n" + 
                 "(1) Edit a previous login entry\n" + 
@@ -69,8 +69,8 @@ def menu(logins):
                 "(5) Decrypt a document\n" +
                 "(6) Hash a document\n" + 
                 "(7) Change packing password\n" + 
-                "(8) Save Dataman changes\n" +
-                "(9) Exit Dataman\n" + 
+                "(8) Print all logins\n" +
+                "(9) Save and Exit Dataman\n" + 
                 "Please select an action: ")
         if(user_sel == '0'):
             add_new_login(logins)
@@ -82,6 +82,10 @@ def menu(logins):
             delete_login(logins)
         elif(user_sel == '4'):
             enc_document(logins)
+        elif(user_sel == '5'):
+            dec_document(logins)
+        elif(user_sel== '6'):
+            hash_document(logins)
         elif(user_sel == '9'):
             return
         else:
@@ -107,7 +111,16 @@ def add_new_login(logins):
                 return
             else:
                 os.system('cls||clear')
-                print("Sorry, there is already an entry with the " + temp_login.name + " name")
+                print("Sorry, there is already an entry with the " + temp_login.name + " name. Overwrite?")
+                response = input("y/n: ")
+                if response == 'y' or response == "yes":
+                    os.system('cls||clear')
+                    logins[temp_login.name] = temp_login
+                    print("Login Added!")
+                    return
+                else:
+                    os.system('cls||clear')
+                    print("Sorry, let's try again")   
         else:
             os.system('cls||clear')
             print("Sorry, let's try again")
@@ -209,15 +222,78 @@ def enc_document(logins):
                 print("The document was encrypted and a login stored in dataman")
                 return
             else:
-                os.system('cls||clear')
-                print("Sorry, there is already an entry with the " + temp_login.name + " name")
+                print("Sorry, there is already an entry with the " + temp_login.name + " name. Overwrite?")
+                response = input("y/n: ")
+                if response == 'y' or response == "yes":
+                    os.system('cls||clear')
+                    logins[temp_login.name] = temp_login
+                    print("Encrypting...")
+                    AES.encrypt(username, password, encrypt_path)
+                    print("The document was encrypted and a login stored in dataman")
+                else:
+                    os.system('cls||clear')
+                    print("Sorry, let's try again")
         else:
             os.system('cls||clear')
             print("Sorry, let's try again")
 def dec_document(logins):
-    return
+    os.system('cls||clear')
+    while True:
+        name = input("Enter in a name for the document (Type \'Exit\' to return): ")
+        if(name == 'Exit'):
+            return
+        username = input("Enter in the path to the document: ")
+        password = input("Enter a password for the decryption: ")
+        decrypt_path = input("Enter in the path for the decrypted document: ")
+        temp_login = LoginInfo.LoginInfo(name, username, password, decrypt_path)
+        os.system('cls||clear')
+        print("Is this entry correct?\nDocument Name: " + name + "\nDocument Path: " + username + "\nKey: " + password + "\nNew Document: " + decrypt_path)
+        response = input("y/n: ")
+        if response == 'y' or response == "yes":
+            if (temp_login.name not in logins):
+                os.system('cls||clear')
+                logins[temp_login.name] = temp_login
+                print("Decrypting...")
+                AES.decrypt(username, password, decrypt_path)
+                print("The document was decrypted and a login stored in dataman")
+                return
+            else:
+                print("Sorry, there is already an entry with the " + temp_login.name + " name. Overwrite?")
+                response = input("y/n: ")
+                if response == 'y' or response == "yes":
+                    os.system('cls||clear')
+                    logins[temp_login.name] = temp_login
+                    print("Decrypting...")
+                    AES.decrypt(username, password, decrypt_path)
+                    print("The document was decrypted and a login stored in dataman")
+                else:
+                    os.system('cls||clear')
+                    print("Sorry, let's try again")
+        else:
+            os.system('cls||clear')
+            print("Sorry, let's try again")
 def hash_document(logins):
-    return
+    os.system('cls||clear')
+    while True:
+        path_to_doc = input("Enter in a path for the document (Type \'Exit\' to return): ")
+        if(path_to_doc == 'Exit'):
+            return
+        hashed_doc = input("Enter in a path for the SHA512 Hash: ")
+        os.system('cls||clear')
+        print("Is this entry correct?\nDocument Path: " + path_to_doc +"\nNew Document: " + hashed_doc)
+        response = input("y/n: ")
+        if response == 'y' or response == "yes":
+            finput = open(path_to_doc,'r')
+            input_doc = finput.read()
+            finput.close()
+            hash = hashlib.sha512(str(input_doc).encode("utf-8")).hexdigest()
+            fout = open(hashed_doc,'w')
+            fout.write(hash)
+            fout.close
+            print("The document was hashed.")
+        else:
+            os.system('cls||clear')
+            print("Sorry, let's try again")
 def change_packing_pass(logins):
     return
 
