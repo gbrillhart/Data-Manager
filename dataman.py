@@ -184,7 +184,7 @@ def main():
         os.system('cls||clear')
         while True:
             #Enter in the information of name, path to encrypt, key, and path to new document
-            name = input("Enter in a name for the document (Type \'Exit\' to return): ")
+            name = input("Enter in a name to reference the document  (Type \'Exit\' to return): ")
             if(name == 'Exit'):
                 return
             username = input("Enter in the path to the document: ")
@@ -233,7 +233,7 @@ def main():
         os.system('cls||clear')
         while True:
             #user inputs necessary information
-            name = input("Enter in a name for the document (Type \'Exit\' to return): ")
+            name = input("Enter in a name to reference the document (Type \'Exit\' to return): ")
             if(name == 'Exit'):
                 return
             username = input("Enter in the path to the document: ")
@@ -362,9 +362,12 @@ def main():
                 isCorrect = False
                 #have user enter in their packing password
                 while not isCorrect:
-                    confirm_pass1 = input("Please enter in your packing password: ")
-                    confirm_pass2 = input("Please confirm password: ")
-                    if not (confirm_pass1 == confirm_pass2):
+                    confirm_pass1 = input("Please enter in your packing password (at least 8 characters): ")
+                    confirm_pass2 = input("Please confirm password (at least 8 characters): ")
+                    if len(confirm_pass1) < 8:
+                        os.system('cls||clear')
+                        print("Sorry, password is not at least 8 charcters long, please try again.")
+                    elif not (confirm_pass1 == confirm_pass2):
                         os.system('cls||clear')
                         print("Sorry, those passwords do not match, please try again.")
                     else:
