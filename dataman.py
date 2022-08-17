@@ -7,10 +7,11 @@ import hashlib
 from LoginInfo import *
 from util import *
 
+user_pass = ""
 
 def main():
     #Base menu state, allows user to select an action for dataman to execute
-    def menu(logins,user_pass):
+    def menu(logins):
         user_sel = -1
         #Loops until user selects to exit
         while not(user_sel == 9):
@@ -43,7 +44,7 @@ def main():
             elif(user_sel== '6'):
                 hash_document()
             elif(user_sel== '7'):
-                change_packing_pass(user_pass)
+                change_packing_pass()
             elif(user_sel== '8'):
                 print_all_logins(logins)
             elif(user_sel == '9'):
@@ -313,8 +314,9 @@ def main():
                 os.system('cls||clear')
                 print("Sorry, let's try again")
     #allows changing of the dataman packing password
-    def change_packing_pass(user_pass):
+    def change_packing_pass():
         os.system('cls||clear')
+        global user_pass
         #checks to ensure user entered correct unpacking password
         while True:
             old_pass = input("Enter in previous password: ")
@@ -324,15 +326,17 @@ def main():
                 print("Sorry, that's not correct")
         #confirms and changes to the new password
         while True:
-            new_pass = input("Enter in new password: ")
-            confirm_pass = input("Confirm new password: ")
-            if(new_pass == confirm_pass):
-                user_pass = new_pass
+            new_pass = input("Enter in new password (at least 8 characters): ")
+            confirm_pass = input("Confirm new password (at least 8 characters): ")
+            if len(new_pass) < 8:
+                print("Password is not long enough, please try again")
+            elif(new_pass == confirm_pass):
                 input("Packing Password has been changed! Hit enter to continue")
+                user_pass = new_pass
                 return
             else:
                 print("Passwords do not match, please try again.")
-        return
+                
     #prints all logins in a sorted matter (is stored and managed unordered for security)
     def print_all_logins(logins):
         print("Logins:")
@@ -343,6 +347,7 @@ def main():
 
     #init base vars
     logins = dict()
+    global user_pass
     user_pass = ""
     access_granted = False
     #use try to ensure files can open and handle exceptions
@@ -392,7 +397,7 @@ def main():
                 print("Invalid key. Please enter in the correct key")
         
         #Enter UI state
-        menu(logins, user_pass)
+        menu(logins)
     #ensure the decrypted file is always wiped in termination of program, even on errors
     #additionally encrypt and write the current login info the dataman.enc
     finally:
@@ -411,7 +416,6 @@ def main():
             #comment out next two lines for unencrypted dataman file, this wipes unencrypted dataman
             decfile = open("dataman.dec", 'w')
             decfile.close()
-            
-            
+                 
 if __name__ == "__main__":
     main()
